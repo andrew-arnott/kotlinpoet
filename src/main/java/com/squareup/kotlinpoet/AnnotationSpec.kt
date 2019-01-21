@@ -232,3 +232,27 @@ class AnnotationSpec private constructor(builder: AnnotationSpec.Builder) {
     @JvmStatic fun builder(type: KClass<out Annotation>) = builder(type.asClassName())
   }
 }
+
+/**
+ * Builds new [AnnotationSpec] by populating newly created [AnnotationSpec.Builder] using provided
+ * [type] and [builderAction] and then converting it to [AnnotationSpec].
+ */
+inline fun buildAnnotationSpec(type: ClassName, builderAction: AnnotationSpec.Builder.() -> Unit): AnnotationSpec {
+  return AnnotationSpec.builder(type).apply(builderAction).build()
+}
+
+/**
+ * Builds new [AnnotationSpec] by populating newly created [AnnotationSpec.Builder] using provided
+ * [type] and [builderAction] and then converting it to [AnnotationSpec].
+ */
+inline fun buildAnnotationSpec(type: Class<out Annotation>, builderAction: AnnotationSpec.Builder.() -> Unit): AnnotationSpec {
+  return AnnotationSpec.builder(type).apply(builderAction).build()
+}
+
+/**
+ * Builds new [AnnotationSpec] by populating newly created [AnnotationSpec.Builder] using provided
+ * [type] and [builderAction] and then converting it to [AnnotationSpec].
+ */
+inline fun buildAnnotationSpec(type: KClass<out Annotation>, builderAction: AnnotationSpec.Builder.() -> Unit): AnnotationSpec {
+  return AnnotationSpec.builder(type).apply(builderAction).build()
+}

@@ -256,6 +256,33 @@ class AnnotationSpecTest {
         "@kotlin.Deprecated(\"Nope\", kotlin.ReplaceWith(\"Nope\"))")
   }
 
+  @Test fun inlineClassNameBuilder() {
+    val annotationSpec = buildAnnotationSpec(AnnotationC::class.asClassName()) {
+      addMember("value = %S", "123")
+    }
+
+    assertThat(annotationSpec.toString()).isEqualTo(
+        "@com.squareup.kotlinpoet.AnnotationSpecTest.AnnotationC(value = \"123\")")
+  }
+
+  @Test fun inlineJavaClassBuilder() {
+    val annotationSpec = buildAnnotationSpec(AnnotationC::class.java) {
+      addMember("value = %S", "123")
+    }
+
+    assertThat(annotationSpec.toString()).isEqualTo(
+        "@com.squareup.kotlinpoet.AnnotationSpecTest.AnnotationC(value = \"123\")")
+  }
+
+  @Test fun inlineKClassBuilder() {
+    val annotationSpec = buildAnnotationSpec(AnnotationC::class) {
+      addMember("value = %S", "123")
+    }
+
+    assertThat(annotationSpec.toString()).isEqualTo(
+        "@com.squareup.kotlinpoet.AnnotationSpecTest.AnnotationC(value = \"123\")")
+  }
+
   private fun toString(annotationSpec: AnnotationSpec) =
       toString(TypeSpec.classBuilder("Taco").addAnnotation(annotationSpec).build())
 
