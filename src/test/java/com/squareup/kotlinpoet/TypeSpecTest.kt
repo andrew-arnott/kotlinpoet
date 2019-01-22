@@ -2836,6 +2836,38 @@ class TypeSpecTest {
     """.trimMargin())
   }
 
+  @Test fun primaryConstructorDsl() {
+    val taco = TypeSpec.classBuilder("Taco")
+        .primaryConstructor {
+          addModifiers(INTERNAL)
+        }
+        .build()
+
+    assertThat(toString(taco)).isEqualTo("""
+    |package com.squareup.tacos
+    |
+    |class Taco internal constructor()
+    |
+    """.trimMargin())
+  }
+
+  @Test fun secondaryConstructorDsl() {
+    val taco = TypeSpec.classBuilder("Taco")
+        .addSecondaryConstructor {
+          addModifiers(INTERNAL)
+        }
+        .build()
+
+    assertThat(toString(taco)).isEqualTo("""
+    |package com.squareup.tacos
+    |
+    |class Taco {
+    |    internal constructor()
+    |}
+    |
+    """.trimMargin())
+  }
+
   @Test fun annotatedInternalConstructor() {
     val injectAnnotation = ClassName("javax.inject", "Inject")
     val taco = TypeSpec.classBuilder("Taco")

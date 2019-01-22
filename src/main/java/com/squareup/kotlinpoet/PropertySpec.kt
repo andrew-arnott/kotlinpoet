@@ -210,11 +210,15 @@ class PropertySpec private constructor(builder: Builder) {
       this.getter = getter
     }
 
+    inline fun getter(builderAction: FunSpec.Builder.() -> Unit) = getter(buildGetter { builderAction() })
+
     fun setter(setter: FunSpec) = apply {
       require(setter.name == SETTER) { "${setter.name} is not a setter" }
       check(this.setter == null) { "setter was already set" }
       this.setter = setter
     }
+
+    inline fun setter(builderAction: FunSpec.Builder.() -> Unit) = setter(buildSetter{ builderAction() })
 
     fun receiver(receiverType: TypeName) = apply {
       this.receiverType = receiverType

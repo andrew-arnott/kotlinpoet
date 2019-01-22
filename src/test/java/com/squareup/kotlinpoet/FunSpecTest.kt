@@ -180,6 +180,17 @@ class FunSpecTest {
       |""".trimMargin())
   }
 
+  @Test fun buildFun() {
+    val funSpec = buildFun("foo") {
+      returns(Unit::class)
+      addStatement("return bar()")
+    }
+
+    assertThat(funSpec.toString()).isEqualTo("""
+      |fun foo(): kotlin.Unit = bar()
+      |""".trimMargin())
+  }
+
   @Test fun functionParamWithKdoc() {
     val funSpec = FunSpec.builder("foo")
         .addParameter(ParameterSpec.builder("string", String::class.asTypeName())
@@ -453,6 +464,17 @@ class FunSpecTest {
       |""".trimMargin())
   }
 
+  @Test fun buildConstructor() {
+    val constructorSpec = buildConstructor {
+      addParameter("a", Int::class)
+      build()
+    }
+
+    assertThat(constructorSpec.toString()).isEqualTo("""
+      |constructor(a: kotlin.Int)
+      |""".trimMargin())
+  }
+
   @Test fun reifiedTypesOnNonInlineFunctionsForbidden() {
     assertThrows<IllegalArgumentException> {
       FunSpec.builder("foo")
@@ -644,5 +666,33 @@ class FunSpecTest {
     builder.parameters.add(seasoning)
 
     assertThat(builder.build().parameters).containsExactly(seasoning)
+  }
+
+  @Test fun buildGetter() {
+    val prop = PropertySpec.builder("foo", String::class.asTypeName())
+        .getter(buildGetter{
+          addStatement("return %S", "foo")
+        })
+        .build()
+
+    assertThat(prop.toString()).isEqualTo("""
+      |val foo: kotlin.String
+      |    get() = "foo"
+      |""".trimMargin())
+  }
+
+  @Test fun buildSetter() {
+    val prop = PropertySpec.builder("foo", String::class.asTypeName())
+        .mutable()
+        .setter(buildSetter{
+          addParameter("value", String::class)
+        })
+        .build()
+
+    assertThat(prop.toString()).isEqualTo("""
+      |var foo: kotlin.String
+      |    set(value) {
+      |    }
+      |""".trimMargin())
   }
 }

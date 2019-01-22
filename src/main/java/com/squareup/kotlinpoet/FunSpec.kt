@@ -536,3 +536,35 @@ class FunSpec private constructor(builder: Builder) {
     }
   }
 }
+
+/**
+ * Builds new [FunSpec] by populating newly created [FunSpec.Builder], using the provided
+ * [name] and [builderAction] and then converting it to [FunSpec].
+ */
+inline fun buildFun(name: String, builderAction: FunSpec.Builder.() -> Unit): FunSpec {
+  return FunSpec.builder(name).apply(builderAction).build()
+}
+
+/**
+ * Builds new [FunSpec] constructor by populating newly created [FunSpec.Builder], using
+ * the provided [builderAction], and then converting it to [FunSpec].
+ */
+inline fun buildConstructor(builderAction: FunSpec.Builder.() -> Unit): FunSpec {
+  return FunSpec.constructorBuilder().apply(builderAction).build()
+}
+
+/**
+ * Builds new [FunSpec] getter by populating newly created [FunSpec.Builder], using
+ * the provided [builderAction], and then converting it to [FunSpec].
+ */
+inline fun buildGetter(builderAction: FunSpec.Builder.() -> Unit): FunSpec {
+  return FunSpec.getterBuilder().apply(builderAction).build()
+}
+
+/**
+ * Builds new [FunSpec] setter by populating newly created [FunSpec.Builder], using
+ * the provided [builderAction], and then converting it to [FunSpec].
+ */
+inline fun buildSetter(builderAction: FunSpec.Builder.() -> Unit): FunSpec {
+  return FunSpec.setterBuilder().apply(builderAction).build()
+}

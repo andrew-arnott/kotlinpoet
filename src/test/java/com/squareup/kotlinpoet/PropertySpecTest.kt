@@ -85,6 +85,35 @@ class PropertySpecTest {
       |""".trimMargin())
   }
 
+  @Test fun useGetterDsl() {
+    val prop = PropertySpec.builder("foo", String::class.asTypeName())
+        .mutable()
+        .getter {
+          addStatement("return %S", "foo")
+        }
+        .build()
+
+          assertThat(prop.toString()).isEqualTo("""
+      |var foo: kotlin.String
+      |    get() = "foo"
+      |""".trimMargin())
+  }
+
+  @Test fun useSetterDsl() {
+    val prop = PropertySpec.builder("foo", String::class.asTypeName())
+        .mutable()
+        .setter {
+          addParameter("value", String::class)
+        }
+        .build()
+
+    assertThat(prop.toString()).isEqualTo("""
+      |var foo: kotlin.String
+      |    set(value) {
+      |    }
+      |""".trimMargin())
+  }
+
   @Test fun inlineForbiddenOnProperty() {
     assertThrows<IllegalArgumentException> {
       PropertySpec.builder("foo", String::class)

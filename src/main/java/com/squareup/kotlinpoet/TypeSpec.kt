@@ -459,6 +459,10 @@ class TypeSpec private constructor(builder: TypeSpec.Builder) {
       this.primaryConstructor = primaryConstructor
     }
 
+    inline fun primaryConstructor(builderAction: FunSpec.Builder.() -> Unit) = apply {
+      primaryConstructor(buildConstructor { builderAction() })
+    }
+
     fun superclass(superclass: TypeName) = apply {
       checkCanHaveSuperclass()
       check(this.superclass === ANY) { "superclass already set to ${this.superclass}" }
@@ -588,6 +592,14 @@ class TypeSpec private constructor(builder: TypeSpec.Builder) {
 
     fun addFunction(funSpec: FunSpec) = apply {
       funSpecs += funSpec
+    }
+
+    inline fun addFunction(name: String, builderAction: FunSpec.Builder.() -> Unit) = apply {
+      addFunction(buildFun(name) { builderAction() })
+    }
+
+    inline fun addSecondaryConstructor(builderAction: FunSpec.Builder.() -> Unit) = apply {
+      addFunction(buildConstructor { builderAction() })
     }
 
     fun addTypes(typeSpecs: Iterable<TypeSpec>) = apply {
